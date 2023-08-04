@@ -3,27 +3,25 @@ import json
 
 api_url = 'https://min-api.cryptocompare.com/data/price'
 
-
 class _HiddenAPIException(Exception):
     def __init__(self, message):
         self.message = message
-
 
 class _HiddenCurrencyConverter:
     @staticmethod
     def get_price(base_currency, quote_currency, amount):
         """
-        Получить цену конвертации одной валюты в другую.
+        Get the conversion price from one currency to another.
 
-        :param base_currency: Исходная валюта для конвертации
-        :param quote_currency: Валюта, в которую нужно конвертировать
-        :param amount: Количество исходной валюты для конвертации
-        :return: Конвертированная сумма в указанной валюте
+        :param base_currency: Source currency for conversion
+        :param quote_currency: Currency to convert to
+        :param amount: Amount of source currency to convert
+        :return: Converted amount in the specified currency
         """
-        # Проверяем, разрешены ли исходная и целевая валюты
+        # Check if the source and target currencies are allowed
         allowed_currencies = ['EUR', 'USD', 'RUB']
         if base_currency not in allowed_currencies or quote_currency not in allowed_currencies:
-            raise _HiddenAPIException("Неверная валюта")
+            raise _HiddenAPIException("Invalid currency")
 
         params = {'fsym': base_currency, 'tsyms': quote_currency}
         response = requests.get(api_url, params=params)
@@ -34,4 +32,4 @@ class _HiddenCurrencyConverter:
             converted_amount = amount * rate
             return converted_amount
         else:
-            raise _HiddenAPIException("Неверная валюта")
+            raise _HiddenAPIException("Invalid currency")
